@@ -1,0 +1,5 @@
+npm install streamlit
+npm install openpyxl
+npm install plotly-express
+npm install pandas
+npm install Pillow
