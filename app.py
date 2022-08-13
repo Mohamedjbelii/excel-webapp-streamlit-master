@@ -12,7 +12,11 @@ st.set_page_config(page_title='Indicator survey')
 st.header('Survey Results 2021/2022')
 
 ### --- LOAD DATAFRAME
-df = pd.read_excel(r"C:\Users\msi\Desktop\khedma\excel-webapp-streamlit-master\indicateur.ods")
+uploaded_file = st.file_uploader("Choose a file")
+if uploaded_file is not None:
+  df = pd.read_excel(uploaded_file)
+
+#df = pd.read_excel(r"C:\Users\msi\Desktop\khedma\excel-webapp-streamlit-master\indicateur.ods")
 df=df.transpose()
 df.rename(columns=df.iloc[0])
 df['years'] = df.index
