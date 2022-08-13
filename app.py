@@ -3,27 +3,40 @@ import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
+import asyncio
 from PIL import Image
+import asyncio
 
 
 
-
-st.set_page_config(page_title='Indicator survey')
+st.set_page_config( page_title='Indicator survey',
+                    page_icon="✅",
+                    )
 st.header('Survey Results 2021/2022')
 
-### --- LOAD DATAFRAME
-uploaded_file = st.file_uploader("Choose a file")
-if uploaded_file is not None:
-  df = pd.read_excel(uploaded_file)
 
-#df = pd.read_excel(r"C:\Users\msi\Desktop\khedma\excel-webapp-streamlit-master\indicateur.ods")
+### --- LOAD DATAFRAME
+def get_data() -> pd.DataFrame:
+    uploaded_file = st.file_uploader("Choose a file")
+    if uploaded_file is not None:
+        df= pd.read_excel(uploaded_file,engine='odf')
+    return df
+df = get_data()
+
+async def g() -> pd.DataFrame:
+        df=await get_data()
+        df=df.transpose()
+        return df
+#-------------------- make the page wait until loading dataframe
+
+#transform dataframe
 df=df.transpose()
 df.rename(columns=df.iloc[0])
 df['years'] = df.index
 df=df.drop(index=df.index[0],
         axis=0)
 
-
+#create the right darafarame
 data = pd.DataFrame()
 
 data['years'] = df['years']
@@ -34,10 +47,10 @@ data["Non technical Data"]=df[2]
 data["∑ Product maintenance"]=df[6]
 data["∑ Product developement"]=df[12]
 data["∑ Product Transfer"]=df[17]
-
 data["∑ Technical Data"]=df[24]
 data["Total"]=df[38]
 data["Theorical per week"]=df[39]
+
 data = data.reset_index(drop=True)
 
 
@@ -108,7 +121,7 @@ fig.update_layout(
 )
 st.write(fig)
 
-#-----------------
+#-----------------Absnece and breaks per year&week
 
 new_title = '<p style="font-family:sans-serif; color:Pink; font-size: 30px;">Absnece and breaks per year&week :</p>'
 st.markdown(new_title, unsafe_allow_html=True)
