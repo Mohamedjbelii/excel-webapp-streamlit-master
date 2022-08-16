@@ -4,3 +4,4 @@ plotly-express==0.4.1
 odfpy==1.4.1
 pandas==1.4.3
 Pillow==9.2.0
+streamlit-authenticator==0.1.5 
