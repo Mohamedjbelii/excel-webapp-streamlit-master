@@ -156,7 +156,7 @@ if authentication_status :
             dct={item: weeks_sum[weeks_sum['Activity']==item] for key,item in enumerate(w) }
 
         #------------Insert_average_column
-            dq={'CTO':5,'ETO':10,'MFG':6, 'PLCM':5, 'STD':8}
+            dq={'CTO':5,'ETO':10,'MFG':5, 'PLCM':5, 'STD':10}
             newdict = {k: dq[k] for k in w if k in dq}
 
             for key,val in newdict.items() :
