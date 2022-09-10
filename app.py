@@ -26,12 +26,12 @@ st.image(image)
 
 #---------User authentification
 
-names=["Peter Parker","Rebecca Miller"]
+names=["asma","karim","ahmed"]
     #--user authen
-usernames=["asma","karim"]
+usernames=["asma","karim","ahmed"]
 
     #----load hashed passwords
-file_path = Path(__file__).parent / "hashed_pw.pk"
+file_path = Path(__file__).parent / "hashed2_pw.pk"
 with file_path.open("rb") as file:
     hashed_passwords=pickle.load(file)
 authenticator = stauth.Authenticate(names,usernames,hashed_passwords,"Indicator_dashboard" ,"abcdef",cookie_expiry_days=30)
@@ -161,8 +161,6 @@ if authentication_status :
 
             for key,val in newdict.items() :
                 dct.get(key).insert(loc=len(dct.get(key).columns), column='Avg', value=val)
-
-        #------------create_figures_of_activities
 
         #------------create_table_of_activities
             new_title = '<p style="font-family:sans-serif; color:black; font-size: 30px;">activities figure :</p>'
