@@ -225,11 +225,13 @@ if authentication_status :
                 new_title = '<p style="font-family:sans-serif; color:black; font-size: 30px;">Non technical Data per week :</p>'
                 st.markdown(new_title, unsafe_allow_html=True)
                 fig = go.Figure()
-                fig.add_trace(go.Scatter(x=data['weeks'], y=data['Total'],
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(x=data['weeks'], y=data['Non technical Data'],
                     mode='lines',
-                    name='Total worked on a week'))
-                fig.add_trace(go.Scatter(x=data['weeks'], y=data['Theorical per week'],
-                    mode='markers', name='Theorical per week'))
+                    name='Non technical data'))
+
+                fig.add_trace(go.Scatter(x=data['weeks'], y=data['Total'],
+                    mode='markers', name='Total per week'))
                 fig.update_layout(
 
                     xaxis_title="weeks",
