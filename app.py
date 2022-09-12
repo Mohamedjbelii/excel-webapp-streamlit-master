@@ -95,9 +95,11 @@ if authentication_status :
             df2=df2.sort_values(by=['Activity'])
             activities=df2['Activity'].unique().tolist()
             df2['Duration']=df2['Duration'].astype(str)
-            df2['Duration']=df2['Duration'].str.replace('00', '')
-            df2['Duration']=df2['Duration'].str.replace(':', '')
-            df2['Duration']=df2['Duration'].astype('int')
+            df2['Duration']=pd.to_datetime(df2.Duration)
+            df2['hours']=df2['Duration'].dt.hour
+            df2['minutes']=df2['Duration'].dt.minute
+            df2['seconds']=df2['Duration'].dt.second
+            df2['Duration']=df2['hours']+(df2['minutes']/60)+(df2['seconds']/3600)
             df2.groupby(['Year','Week','Activity','MM/WF CODE'])['Duration'].sum()
             current_year = date.today().year
             df2=df2[df2['Year']==current_year]
@@ -110,16 +112,16 @@ if authentication_status :
             weeks_sum=weeks_sum[weeks_sum['Activity']!='0']
             non_technical=df2[df2['Activity']=='0']
             non_technical=non_technical.groupby(['Year','Week','Task']).agg({'Duration':'sum'}).reset_index()
+            non_technical['Duration']=non_technical['Duration']*60
+            non_technical['Duration']=pd.to_datetime(non_technical.Duration, unit='m').dt.strftime('%H:%M')
+
             return weeks_sum, non_technical
 
         #------------create_second_data_figures_of_non_technical_data
         def create_figure_of_non_technical_data(non_technical):
 
-            w=non_technical['Duration'].to_list()
-            k=[]
-            for i in range (0, len(w)) :
-               k.append(w[i]/60)
-            non_technical['Duration']=k
+
+
             new_title = '<p style="font-family:sans-serif; color:black; font-size: 30px;">Non Technical Data table :</p>'
             st.markdown(new_title, unsafe_allow_html=True)
             fig = go.Figure(data=[go.Table(header=dict(values=['year','Week','Task','Duration (in hours)']),
@@ -145,14 +147,13 @@ if authentication_status :
         #------------create_second_data_figures_of_activities
         def create_figure_of_activities(weeks_sum):
         #------------create_activities_dictionary
-            w=weeks_sum['Duration'].to_list()
-            k=[]
-            for i in range (0, len(w)) :
-               k.append(w[i]/60)
-            weeks_sum['Duration']=k
+
+
             weeks_sum['Year']=weeks_sum['Year'].astype(str)
             weeks_sum['Week']=weeks_sum['Week'].astype(str)
             w=weeks_sum['Activity'].unique().tolist()
+            weeks_sum['Duration']=weeks_sum['Duration']*60
+            weeks_sum['Duration']=pd.to_datetime(weeks_sum.Duration, unit='m').dt.strftime('%H:%M')
             dct={item: weeks_sum[weeks_sum['Activity']==item] for key,item in enumerate(w) }
 
         #------------Insert_average_column
